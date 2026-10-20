@@ -1,5 +1,8 @@
 name: Zalith local import package
 on:
+  push:
+    branches: [arena/b3c523aa-powervr-the-poop]
+    paths: [tools/package_zalith.py, .github/workflows/zalith-package.yml]
   workflow_dispatch:
     inputs:
       native_run_id:
@@ -20,7 +23,7 @@ jobs:
         with:
           pattern: powervr-unified-*
           path: .work/native
-          run-id: ${{ inputs.native_run_id }}
+          run-id: ${{ inputs.native_run_id || '39412955913' }}
           github-token: ${{ github.token }}
       - name: Package both ARM ABIs for original Zalith
         run: >-
