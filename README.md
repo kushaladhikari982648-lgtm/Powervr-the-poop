@@ -1,18 +1,21 @@
 # PowerVR mobile renderer — experimental GL4ES build
 
-## New: combined LTW + Krypton build
-
-A second build path now compiles **both real upstream backends into one package**:
+## Primary build: one integrated renderer
 
 ```sh
-python3 tools/build_combined.py --ndk /path/to/ndk --abi arm64-v8a
-python3 tools/select_backend.py --minecraft 1.21.4 --gles 3.2
+python3 tools/build_unified.py --ndk /path/to/ndk --abi arm64-v8a
 ```
 
-See [combined backend instructions](docs/COMBINED.md). This is a selectable pair
-of independent native libraries, not a merged GL core or an installable launcher
-plugin. **All Minecraft versions are not guaranteed.** The selector is a heuristic,
-not evidence of compatibility. No device or performance validation has occurred.
+Produces **one `libpowervr.so`**, not two selectable engines. Krypton owns GL state
+and dispatch; LTW-derived indirect multidraw code is compiled directly into it.
+See [integration scope and build instructions](docs/UNIFIED.md).
+
+**Partial integration:** only LTW's native indirect multidraw forwarding is ported
+so far, with additional validation and Krypton state synchronization. This is not
+a wholesale merger, verified launcher plugin, or all-Minecraft-versions guarantee.
+
+The earlier [dual-backend package](docs/COMBINED.md) remains available for research,
+but it is separate from the single-renderer build above.
 
 ## Original GL4ES baseline
 

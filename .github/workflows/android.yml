@@ -49,3 +49,25 @@ jobs:
           name: powervr-combined-${{ matrix.abi }}
           path: artifacts/${{ matrix.abi }}/powervr-combined.zip
           if-no-files-found: error
+
+  unified:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: [arm64-v8a, armeabi-v7a]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install CMake
+        run: python3 -m pip install cmake==3.31.6
+      - name: Test tooling and integrated native code
+        run: python3 -m unittest discover -s tests -v
+      - name: Install pinned NDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'ndk;28.2.13676358' > /dev/null
+      - name: Build one integrated renderer
+        run: python3 tools/build_unified.py --ndk "$ANDROID_HOME/ndk/28.2.13676358" --abi '${{ matrix.abi }}' --jobs 2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: powervr-unified-${{ matrix.abi }}
+          path: artifacts/${{ matrix.abi }}/powervr-unified.zip
+          if-no-files-found: error
