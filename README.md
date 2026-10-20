@@ -1,5 +1,21 @@
 # PowerVR mobile renderer — experimental GL4ES build
 
+## New: combined LTW + Krypton build
+
+A second build path now compiles **both real upstream backends into one package**:
+
+```sh
+python3 tools/build_combined.py --ndk /path/to/ndk --abi arm64-v8a
+python3 tools/select_backend.py --minecraft 1.21.4 --gles 3.2
+```
+
+See [combined backend instructions](docs/COMBINED.md). This is a selectable pair
+of independent native libraries, not a merged GL core or an installable launcher
+plugin. **All Minecraft versions are not guaranteed.** The selector is a heuristic,
+not evidence of compatibility. No device or performance validation has occurred.
+
+## Original GL4ES baseline
+
 An Android native-library build project for experimenting with PowerVR devices in
 Minecraft Java launchers. **This is not yet a tested launcher plugin, a new GL
 implementation, or a combination of four renderers.** Rendering is performed by
@@ -14,7 +30,7 @@ pinned upstream GL4ES, which translates desktop OpenGL to OpenGL ES.
   upstream revision, NDK version, and library SHA-256.
 - CI builds both ABIs; Python tests validate configuration and ELF-header checking.
 
-**Not implemented:** LTW/Krypton/Rust code integration, APK/plugin packaging,
+**Not implemented in the original baseline:** LTW/Krypton/Rust integration, APK/plugin packaging,
 launcher-specific JNI/context bridging, modern desktop GL features, or measured
 PowerVR optimizations. No FPS improvement or launcher compatibility is claimed.
 
