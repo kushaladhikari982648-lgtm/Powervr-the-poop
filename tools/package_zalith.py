@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Package successful unified builds for original Zalith's local ZIP importer."""
 import argparse
-import io
 import json
 from pathlib import Path
 import struct
@@ -24,7 +23,7 @@ def package(build_zips, output):
     config = {
         "pluginVersion": 1,
         "rendererId": "opengles3",
-        "rendererDisplayName": "PowerVR Unified (experimental)",
+        "rendererDisplayName": "PowerVR Unified r2 (experimental)",
         "glName": "libpowervr.so",
         "eglName": "libEGL.so",
         "boatEnv": {},
@@ -56,9 +55,9 @@ def package(build_zips, output):
                 for name in source.namelist():
                     if name != "libpowervr.so" and not name.endswith("/"):
                         dest.writestr(f"sources/{abi}/{name}", source.read(name))
-        dest.writestr("README.txt", """PowerVR Unified - experimental original Zalith Launcher local plugin
+        dest.writestr("README.txt", """PowerVR Unified r2 - experimental original Zalith Launcher local plugin
 Import this ZIP without extracting it using the launcher's local renderer import.
-Select PowerVR Unified (experimental) in renderer settings, then restart the game.
+Select PowerVR Unified r2 (experimental) in renderer settings, then restart the game.
 Requires a real GLES 3 driver. Native compilation passed; on-device gameplay is
 NOT verified. No all-Minecraft, mod or shader compatibility guarantee is made.
 Do not replace system libraries. If it crashes, revert to your previous renderer.

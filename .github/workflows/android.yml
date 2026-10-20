@@ -71,3 +71,13 @@ jobs:
           name: powervr-unified-${{ matrix.abi }}
           path: artifacts/${{ matrix.abi }}/powervr-unified.zip
           if-no-files-found: error
+      - name: Package fresh build for original Zalith local import
+        run: >-
+          python3 tools/package_zalith.py
+          --build-zip artifacts/${{ matrix.abi }}/powervr-unified.zip
+          --output artifacts/${{ matrix.abi }}/powervr-zalith-r2.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: powervr-zalith-r2-${{ matrix.abi }}
+          path: artifacts/${{ matrix.abi }}/powervr-zalith-r2.zip
+          if-no-files-found: error
