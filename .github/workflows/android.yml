@@ -1,0 +1,27 @@
+name: Android GL4ES build
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: [arm64-v8a, armeabi-v7a]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test build tooling
+        run: python3 -m unittest discover -s tests -v
+      - name: Install pinned NDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'ndk;27.2.12479018' > /dev/null
+      - name: Build native library
+        run: python3 tools/build.py --ndk "$ANDROID_HOME/ndk/27.2.12479018" --abi '${{ matrix.abi }}'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: powervr-gl4es-${{ matrix.abi }}
+          path: artifacts/${{ matrix.abi }}/powervr-safe.zip
+          if-no-files-found: error
